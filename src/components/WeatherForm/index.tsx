@@ -36,7 +36,6 @@ function WeatherForm() {
         params: weatherData,
       })
       .then((response) => {
-        dispatch({ type: SET_UNITS, payload: weatherData.units })
         dispatch({ type: SET_WEATHER_DATA, payload: response.data });
         reset();
       })
@@ -99,16 +98,20 @@ function WeatherForm() {
               defaultChecked={state.units === "metric"}
               type="radio"
               id="metric"
-              {...register("units")}
+              name="units"
+              value={"metric"}
+              onChange={() => dispatch({ type: SET_UNITS, payload: "metric" })}
             />
             <label htmlFor="metric">Metric</label>
           </div>
           <div>
             <input
               type="radio"
+              name="units"
               defaultChecked={state.units === "imperial"}
               id="imperial"
-              {...register("units")}
+              value={"imperial"}
+              onChange={() => dispatch({ type: SET_UNITS, payload: "imperial" })}
             />
             <label htmlFor="imperial">Imperial</label>
           </div>

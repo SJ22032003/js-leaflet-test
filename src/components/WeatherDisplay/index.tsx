@@ -12,7 +12,10 @@ function WeatherDisplay() {
   }
 
   const formatTemp = (temp: number) => {
-    return temp.toFixed(2);
+    if (units === "metric") {
+      return temp.toFixed(2);
+    }
+    return ((temp * 9) / 5 + 32).toFixed(2);
   };
 
   const currentWeather = data.weather[0];
@@ -23,7 +26,7 @@ function WeatherDisplay() {
         <h2>{`${data.name}, ${data.sys.country}`}</h2>
         <p>
           Current temperature:{" "}
-          <strong>{`${formatTemp(data.main.temp)}°C`}</strong>
+          <strong>{`${formatTemp(data.main.temp)}°${units === "metric" ? 'C' : 'F'}`}</strong>
         </p>
         <p>
           Feels like: <strong>{`${formatTemp(data.main.feels_like)}°${units === "metric" ? 'C' : 'F'}`}</strong>
