@@ -2,8 +2,12 @@ import { useForm } from "react-hook-form";
 import { weatherApiInstance } from "../../api";
 import { useContext } from "react";
 import { WeatherContext } from "../../context";
-import { SET_ERROR, SET_LOADING, SET_WEATHER_DATA } from "../../context/actions";
-import styles from './styles.module.css';
+import {
+  SET_ERROR,
+  SET_LOADING,
+  SET_WEATHER_DATA,
+} from "../../context/actions";
+import styles from "./styles.module.css";
 
 type TFormData = {
   lat: number;
@@ -19,21 +23,25 @@ function WeatherForm() {
     reset,
   } = useForm<TFormData>();
 
-  const { dispatch } = useContext(WeatherContext);
+  const { dispatch, state } = useContext(WeatherContext);
 
   // FORM SUBMISSION FUNCTION
   const onSubmit = async (weatherData: TFormData) => {
-    dispatch({ type: SET_LOADING, payload: "PENDING" })
-    await weatherApiInstance.get("/forecast", {
-      params: weatherData
-    }).then((response) => {
-      dispatch({ type: SET_WEATHER_DATA, payload: response.data });
-      reset();
-    }).catch((error) => {
-      dispatch({ type: SET_ERROR, payload: error.message })
-    }).finally(() => {
-      dispatch({ type: SET_LOADING, payload: "IDLE" })
-    })
+    dispatch({ type: SET_LOADING, payload: "PENDING" });
+    await weatherApiInstance
+      .get("/weather", {
+        params: weatherData,
+      })
+      .then((response) => {
+        dispatch({ type: SET_WEATHER_DATA, payload: response.data });
+        reset();
+      })
+      .catch((error) => {
+        dispatch({ type: SET_ERROR, payload: error.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_LOADING, payload: "IDLE" });
+      });
   };
 
   return (
@@ -47,7 +55,7 @@ function WeatherForm() {
             id="lat"
             {...register("lat", { required: true })}
           />
-          {errors.lat && <span>Latitude is required</span>}
+          {errors.lat && <span className="error-text">Latitude is required</span>}
         </div>
 
         {/* LONGITUDE INPUT */}
@@ -58,7 +66,7 @@ function WeatherForm() {
             id="lon"
             {...register("lon", { required: true })}
           />
-          {errors.lon && <span>Longitude is required</span>}
+          {errors.lon && <span className="error-text">Longitude is required</span>}
         </div>
 
         {/* LOCATION SEARCH HERE */}
@@ -72,7 +80,9 @@ function WeatherForm() {
           />
         </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={state.loading === "PENDING"}>
+          Submit
+        </button>
       </form>
     </section>
   );

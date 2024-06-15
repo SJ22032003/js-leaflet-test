@@ -1,7 +1,9 @@
+import styles from "./styles.module.css";
+
 function WeatherDisplay() {
-  return (
-    <div>WeatherDisplay</div>
-  )
+  return <div className={styles.mainDisplayContainer}>
+    
+  </div>;
 }
 
-export default WeatherDisplay
+export default WeatherDisplay;
