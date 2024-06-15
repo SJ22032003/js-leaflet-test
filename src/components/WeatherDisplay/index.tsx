@@ -1,14 +1,15 @@
 import styles from "./styles.module.css";
 import { useContext } from "react";
 import { WeatherContext } from "../../context";
+import Loader from "../common/Loader";
 
 function WeatherDisplay() {
   const {
-    state: { data, units },
+    state: { data, units, loading },
   } = useContext(WeatherContext);
 
   if (!data) {
-    return <h1>No data to display</h1>;
+    return <></>;
   }
 
   const formatTemp = (temp: number) => {
@@ -22,6 +23,7 @@ function WeatherDisplay() {
 
   return (
     <section className={styles.mainDisplayContainer}>
+      { loading === "PENDING" && <Loader />}
       <div>
         <h2>{`${data.name}, ${data.sys.country}`}</h2>
         <p>

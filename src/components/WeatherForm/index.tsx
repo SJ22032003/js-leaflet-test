@@ -57,7 +57,7 @@ function WeatherForm() {
 
   return (
     <section className={styles.mainContainer}>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
+      <form noValidate onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
         {/* LATITUDE INPUT */}
         <div>
           <label htmlFor="lat">Latitude</label>
