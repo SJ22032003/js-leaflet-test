@@ -55,6 +55,7 @@ export interface WeatherResponse {
 
 export type WeatherState = {
   data: WeatherResponse | null;
+  units: "metric" | "imperial";
   loading: "IDLE" | "PENDING" | "SUCCESS" | "ERROR";
   error: string | null;
 };

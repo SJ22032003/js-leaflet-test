@@ -4,7 +4,7 @@ import { WeatherContext } from "../../context";
 
 function WeatherDisplay() {
   const {
-    state: { data },
+    state: { data, units },
   } = useContext(WeatherContext);
 
   if (!data) {
@@ -26,7 +26,7 @@ function WeatherDisplay() {
           <strong>{`${formatTemp(data.main.temp)}°C`}</strong>
         </p>
         <p>
-          Feels like: <strong>{`${formatTemp(data.main.feels_like)}°C`}</strong>
+          Feels like: <strong>{`${formatTemp(data.main.feels_like)}°${units === "metric" ? 'C' : 'F'}`}</strong>
         </p>
         <p>
           Humidity: <strong>{`${data.main.humidity}%`}</strong>

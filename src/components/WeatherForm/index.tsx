@@ -6,6 +6,7 @@ import {
   SET_ERROR,
   SET_LOADING,
   SET_WEATHER_DATA,
+  SET_UNITS,
 } from "../../context/actions";
 import styles from "./styles.module.css";
 
@@ -13,6 +14,7 @@ type TFormData = {
   lat: string;
   lon: string;
   q: string;
+  units: 'metric' | 'imperial';
 };
 
 function WeatherForm() {
@@ -34,6 +36,7 @@ function WeatherForm() {
         params: weatherData,
       })
       .then((response) => {
+        dispatch({ type: SET_UNITS, payload: weatherData.units })
         dispatch({ type: SET_WEATHER_DATA, payload: response.data });
         reset();
       })
@@ -87,6 +90,28 @@ function WeatherForm() {
             {...register("q")}
             placeholder="Enter location"
           />
+        </div>
+
+        {/* UNITS SELECT  RADIO */}
+        <div className={styles.unitsSelect}>
+          <div>
+            <input
+              defaultChecked={state.units === "metric"}
+              type="radio"
+              id="metric"
+              {...register("units")}
+            />
+            <label htmlFor="metric">Metric</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              defaultChecked={state.units === "imperial"}
+              id="imperial"
+              {...register("units")}
+            />
+            <label htmlFor="imperial">Imperial</label>
+          </div>
         </div>
 
         <button type="submit" disabled={state.loading === "PENDING"}>
