@@ -1,13 +1,26 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 import { Icon, LatLngExpression } from "leaflet";
 import { useContext, useEffect } from "react";
 import { WeatherContext } from "../../context";
 import { weatherApiInstance } from "../../api";
-import { SET_ERROR, SET_LOADING, SET_WEATHER_DATA } from "../../context/actions";
+import {
+  SET_ERROR,
+  SET_LOADING,
+  SET_WEATHER_DATA,
+} from "../../context/actions";
 import "leaflet/dist/leaflet.css";
 import styles from "./styles.module.css";
 
-const LocationSelector: React.FC<{ onLocationSelected: (lat: number, lon: number) => void }> = ({ onLocationSelected }) => {
+const LocationSelector: React.FC<{
+  onLocationSelected: (lat: number, lon: number) => void;
+}> = ({ onLocationSelected }) => {
   useMapEvents({
     click(e) {
       // Check if the Shift key is pressed during the click event
@@ -17,29 +30,32 @@ const LocationSelector: React.FC<{ onLocationSelected: (lat: number, lon: number
       }
     },
   });
-  
+
   return null;
 };
 
 const ChangeMapView: React.FC<{ center: [number, number] }> = ({ center }) => {
   const map = useMap();
-  
+
   useEffect(() => {
     const zoomLevel = 10;
     const flyToOptions = {
       animate: true,
-      duration: 2
+      duration: 2,
     };
 
     map.flyTo(center as LatLngExpression, zoomLevel, flyToOptions);
   }, [center, map]);
-  
+
   return null;
 };
 
 function MapDisplay() {
   const { state, dispatch } = useContext(WeatherContext);
-  const position: [number, number] = [state.data?.coord.lat || 28.7041, state.data?.coord.lon || 77.1025]; // Default to Delhi, India
+  const position: [number, number] = [
+    state.data?.coord.lat || 28.7041,
+    state.data?.coord.lon || 77.1025,
+  ]; // Default to Delhi, India
 
   const customIcon = new Icon({
     iconUrl:
@@ -63,27 +79,30 @@ function MapDisplay() {
       .finally(() => {
         dispatch({ type: SET_LOADING, payload: "IDLE" });
       });
-  }
+  };
 
   return (
-    <MapContainer
-      center={position}
-      zoom={10}
-      scrollWheelZoom={false}
-      className={styles.mapContainer}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={position} icon={customIcon}>
-        <Popup>{state.data?.name || ""}</Popup>
-      </Marker>
-      <LocationSelector
-        onLocationSelected={handleCoordinateChange}
-      />
-      <ChangeMapView center={position} />
-    </MapContainer>
+    <>
+      <MapContainer
+        center={position}
+        zoom={10}
+        scrollWheelZoom={false}
+        className={styles.mapContainer}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={position} icon={customIcon}>
+          <Popup>{state.data?.name || ""}</Popup>
+        </Marker>
+        <LocationSelector onLocationSelected={handleCoordinateChange} />
+        <ChangeMapView center={position} />
+      </MapContainer>
+      <p style={{ textAlign: "center" }}>
+        To change location do <code>shift + click</code> on the Map
+      </p>
+    </>
   );
 }
 
