@@ -9,6 +9,8 @@
     font-family: 'Roboto', sans-serif;
     min-height: 100vh;
     background-color: #282c34;
+    max-width: 1600px;
+    margin-inline: auto;
   }
 
   .error-text {
