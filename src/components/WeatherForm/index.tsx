@@ -3,6 +3,7 @@ import { weatherApiInstance } from "../../api";
 import { useContext } from "react";
 import { WeatherContext } from "../../context";
 import { SET_ERROR, SET_LOADING, SET_WEATHER_DATA } from "../../context/actions";
+import styles from './styles.module.css';
 
 type TFormData = {
   lat: number;
@@ -36,8 +37,8 @@ function WeatherForm() {
   };
 
   return (
-    <section>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <section className={styles.mainContainer}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
         {/* LATITUDE INPUT */}
         <div>
           <label htmlFor="lat">Latitude</label>

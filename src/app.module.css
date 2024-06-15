@@ -1,0 +1,17 @@
+.mainContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  height: 100vh;
+  & > aside {
+    padding: 1rem;
+    height: inherit;
+  }
+  & > aside:nth-child(1) {
+    flex: 0.75;
+  };
+  & > aside:nth-child(2) {
+    flex: 1;
+  };
+}
