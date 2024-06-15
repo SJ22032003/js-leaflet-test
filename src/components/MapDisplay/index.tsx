@@ -28,7 +28,7 @@ const LocationSelector: React.FC<{
       longPressTimer.current = setTimeout(() => {
         const { lat, lng } = e.latlng;
         onLocationSelected(lat, lng);
-      }, 1000); // 1000ms = 1s
+      }, 2000); // 2000ms = 1s
     },
     click(e) {
       // Check if the Shift key is pressed during the click event
