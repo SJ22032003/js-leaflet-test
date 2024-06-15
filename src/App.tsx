@@ -4,11 +4,14 @@ import styles from "./app.module.css";
 import WeatherForm from "./components/WeatherForm";
 import WeatherDisplay from "./components/WeatherDisplay";
 import MapDisplay from "./components/MapDisplay";
+import { Toaster } from "sonner";
 
 function App() {
   const [state, dispatch] = useReducer(weatherReducer, initialState);
 
   return (
+    <>
+    <Toaster />
     <main className={styles.mainContainer}>
       <WeatherContext.Provider value={{ state, dispatch }}>
         <aside>
@@ -20,6 +23,7 @@ function App() {
         </aside>
       </WeatherContext.Provider>
     </main>
+    </>
   );
 }
 

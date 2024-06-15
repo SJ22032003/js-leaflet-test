@@ -1,13 +1,44 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { Icon } from "leaflet";
-import { useContext } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
+import { Icon, LatLngExpression } from "leaflet";
+import { useContext, useEffect } from "react";
 import { WeatherContext } from "../../context";
+import { weatherApiInstance } from "../../api";
+import { SET_ERROR, SET_LOADING, SET_WEATHER_DATA } from "../../context/actions";
 import "leaflet/dist/leaflet.css";
 import styles from "./styles.module.css";
 
+const LocationSelector: React.FC<{ onLocationSelected: (lat: number, lon: number) => void }> = ({ onLocationSelected }) => {
+  useMapEvents({
+    click(e) {
+      // Check if the Shift key is pressed during the click event
+      if (e.originalEvent.shiftKey) {
+        const { lat, lng } = e.latlng;
+        onLocationSelected(lat, lng);
+      }
+    },
+  });
+  
+  return null;
+};
+
+const ChangeMapView: React.FC<{ center: [number, number] }> = ({ center }) => {
+  const map = useMap();
+  
+  useEffect(() => {
+    const zoomLevel = 10;
+    const flyToOptions = {
+      animate: true,
+      duration: 2
+    };
+
+    map.flyTo(center as LatLngExpression, zoomLevel, flyToOptions);
+  }, [center, map]);
+  
+  return null;
+};
 
 function MapDisplay() {
-  const { state } = useContext(WeatherContext);
+  const { state, dispatch } = useContext(WeatherContext);
   const position: [number, number] = [state.data?.coord.lat || 0, state.data?.coord.lon || 0];
 
   const customIcon = new Icon({
@@ -16,6 +47,23 @@ function MapDisplay() {
     iconSize: [25, 41],
     iconAnchor: [12, 41],
   });
+
+  const handleCoordinateChange = async (lat: number, lon: number) => {
+    dispatch({ type: SET_LOADING, payload: "PENDING" });
+    await weatherApiInstance
+      .get("/weather", {
+        params: { lat, lon },
+      })
+      .then((response) => {
+        dispatch({ type: SET_WEATHER_DATA, payload: response.data });
+      })
+      .catch((error) => {
+        dispatch({ type: SET_ERROR, payload: error.message });
+      })
+      .finally(() => {
+        dispatch({ type: SET_LOADING, payload: "IDLE" });
+      });
+  }
 
   return (
     <MapContainer
@@ -31,6 +79,10 @@ function MapDisplay() {
       <Marker position={position} icon={customIcon}>
         <Popup>{state.data?.name || ""}</Popup>
       </Marker>
+      <LocationSelector
+        onLocationSelected={handleCoordinateChange}
+      />
+      <ChangeMapView center={position} />
     </MapContainer>
   );
 }
