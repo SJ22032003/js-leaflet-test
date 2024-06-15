@@ -7,7 +7,7 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import { Icon, LatLngExpression } from "leaflet";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect } from "react";
 import { WeatherContext } from "../../context";
 import { weatherApiInstance } from "../../api";
 import {
@@ -21,15 +21,7 @@ import styles from "./styles.module.css";
 const LocationSelector: React.FC<{
   onLocationSelected: (lat: number, lon: number) => void;
 }> = ({ onLocationSelected }) => {
-  const longPressTimer = useRef<number|null>(null);
   useMapEvents({
-    mousedown(e) {
-      // Start a timer on mousedown
-      longPressTimer.current = setTimeout(() => {
-        const { lat, lng } = e.latlng;
-        onLocationSelected(lat, lng);
-      }, 2000); // 2000ms = 1s
-    },
     click(e) {
       // Check if the Shift key is pressed during the click event
       if (e.originalEvent.shiftKey) {
@@ -108,7 +100,7 @@ function MapDisplay() {
         <ChangeMapView center={position} />
       </MapContainer>
       <p style={{ textAlign: "center" }}>
-       <p> To change location do <code>shift + click</code> or <code>long press</code> on the Map</p>
+       <p> To change location do <code>shift + click</code> on the Map</p>
       </p>
     </>
   );
