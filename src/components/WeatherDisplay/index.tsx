@@ -29,8 +29,10 @@ function WeatherDisplay() {
           Feels like: <strong>{`${formatTemp(data.main.feels_like)}°C`}</strong>
         </p>
         <p>
-          Max: <strong>{`${formatTemp(data.main.temp_max)}°C`}</strong>, Min:{" "}
-          <strong>{`${formatTemp(data.main.temp_min)}°C`}</strong>
+          Humidity: <strong>{`${data.main.humidity}%`}</strong>
+        </p>
+        <p>
+          Wind Speed: <strong>{`${data.wind.speed} m/s`}</strong>
         </p>
         <p>
           {currentWeather.description.charAt(0).toUpperCase() +

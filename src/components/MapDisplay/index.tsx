@@ -39,7 +39,7 @@ const ChangeMapView: React.FC<{ center: [number, number] }> = ({ center }) => {
 
 function MapDisplay() {
   const { state, dispatch } = useContext(WeatherContext);
-  const position: [number, number] = [state.data?.coord.lat || 0, state.data?.coord.lon || 0];
+  const position: [number, number] = [state.data?.coord.lat || 28.7041, state.data?.coord.lon || 77.1025]; // Default to Delhi, India
 
   const customIcon = new Icon({
     iconUrl:

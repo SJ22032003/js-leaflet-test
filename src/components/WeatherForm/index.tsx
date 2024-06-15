@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { weatherApiInstance } from "../../api";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { WeatherContext } from "../../context";
 import {
   SET_ERROR,
@@ -10,8 +10,8 @@ import {
 import styles from "./styles.module.css";
 
 type TFormData = {
-  lat: number;
-  lon: number;
+  lat: string;
+  lon: string;
   q: string;
 };
 
@@ -21,6 +21,7 @@ function WeatherForm() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<TFormData>();
 
   const { dispatch, state } = useContext(WeatherContext);
@@ -43,6 +44,14 @@ function WeatherForm() {
         dispatch({ type: SET_LOADING, payload: "IDLE" });
       });
   };
+
+  useEffect(() => {
+    if (state.data?.coord) {
+      setValue("lat", state.data.coord.lat.toString());
+      setValue("lon", state.data.coord.lon.toString());
+      setValue("q", state.data.name);
+    }
+  }, [state.data?.coord]);
 
   return (
     <section className={styles.mainContainer}>
