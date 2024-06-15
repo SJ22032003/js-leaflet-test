@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   color: white;
-  height: 100vh;
+  min-height: 100vh;
   & > aside {
     padding: 1rem;
     height: inherit;
@@ -17,4 +17,28 @@
   & > aside:nth-child(2) {
     flex: 1;
   };
+}
+
+@media screen and (max-width: 756px) {
+  .mainContainer {
+    flex-direction: column;
+    & > aside:nth-child(1) {
+      flex: 1;
+      flex-direction: row;
+      align-items: flex-start;
+    };
+    & > aside:nth-child(2) {
+      flex: 1;
+      width: 100%;
+    };
+  }
+}
+
+@media screen and (max-width: 596px) {
+  .mainContainer {
+    & > aside:nth-child(1) {
+      align-items: center;
+      flex-direction: column;
+    };
+  }
 }
